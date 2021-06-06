@@ -1,0 +1,41 @@
+//=============================================================================
+// LN_FilmicFilter.js
+// ----------------------------------------------------------------------------
+// Copyright (c) 2021 lriki
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+// ----------------------------------------------------------------------------
+// [GitHub] : https://github.com/lriki/LN_FilmicFilter
+// [Twitter]: https://twitter.com/lriki8
+//=============================================================================
+
+/*:ja
+ * @plugindesc LN_FilmicFilter v0.0.1
+ * @author lriki
+ *
+ * @help test.
+ *
+ * MIT License
+ *
+ *
+ * @command RE.ShowChallengeResult
+ * @text ShowChallengeResult
+ * @desc test
+ *
+ * @command RE.ShowWarehouse
+ * @text ShowWarehouse
+ * @desc 引数 actorId に指定した ID のアクターが持つ Inventory を倉庫として、倉庫画面を表示します。
+ * @arg actorId
+ * @type number
+ *
+ * @command RE-ProceedFloorForward
+ * @text ProceedFloorForward
+ * @desc 次のフロアへ
+ *
+ * @command RE-ProceedFloorBackword
+ * @text ProceedFloorBackword
+ * @desc 前のフロアへ
+ */
+ 
+
+ 
