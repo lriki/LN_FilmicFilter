@@ -1,4 +1,6 @@
 precision mediump float;
+uniform highp vec4 inputSize;
+uniform highp vec4 outputFrame;
 uniform sampler2D uSampler;
 varying vec2 vTextureCoord;
 
@@ -9,8 +11,13 @@ uniform float _SmoothWidth;
 
 #define saturate(x) clamp(x, 0.0, 1.0)
 
+vec2 filterTextureCoord() {
+    //return vTextureCoord * inputSize.xy / outputFrame.zw;
+    return vTextureCoord;
+}
+
 void main () {
-    vec4 texel = texture2D(uSampler, vTextureCoord);
+    vec4 texel = texture2D(uSampler, filterTextureCoord());
     vec3 luma = vec3(0.299, 0.587, 0.114);
     float v = saturate(dot(texel.xyz, luma));
     vec4 outputColor = vec4(_Color.rgb, _Opacity);

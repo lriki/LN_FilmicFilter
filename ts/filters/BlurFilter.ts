@@ -114,7 +114,18 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
      {
         super();
 
-        this.gui = new dat.GUI();
+        const element = document.getElementById("gameCanvas");
+        if (!element) throw new Error("gameCanvas element not found.");
+
+        this.gui = new dat.GUI({ autoPlace: true });
+        //this.gui.domElement = element;
+        //element.append(this.gui.domElement);
+        const guiContainer = this.gui.domElement.parentElement;
+        if (!guiContainer) throw new Error("guiContainer element not found.");
+
+        //this.gui.domElement.addEventListener('mousedown', e => { e.stopImmediatePropagation(); }, true);
+
+        guiContainer.style.zIndex = "2";
         this.param = new Parameters();
 
         const onSave = {
@@ -154,6 +165,7 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
 
 
         this._repeatEdgePixels = false;
+        this.updatePadding();
 
         // ★ .d がプロパティになっていなかったので
         this.blendMode = this.blurYFilter.blendMode;
@@ -182,12 +194,24 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
      //apply(filterManager: PIXI.systems.FilterSystem, input: PIXI.RenderTexture, output: PIXI.RenderTexture, clear: boolean | PIXI.CLEAR_MODES)
      apply(filterManager: PIXI.systems.FilterSystem, input: PIXI.RenderTexture, output: PIXI.RenderTexture, clear: boolean, currentState?: any): void
      {
+         /* input は次のような状態で渡されてくる。
+          * input.width: 816
+          * input.height: 624
+          * input.baseTexture.width: 816
+          * input.baseTexture.height: 624
+          * input.resolution: 1
+          */
+
+
          const xStrength = Math.abs(this.blurXFilter.blur);
          const yStrength = Math.abs(this.blurYFilter.blur);
+
+         //clear = true;
  
          if (xStrength && yStrength)
          {
              // Prepare Bloom
+            const brightTexture = filterManager.getFilterTexture(input);
              {
                 let resolution = 0.5;
                 for (let i = 0; i < MIPS; i++) {
@@ -196,11 +220,15 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
                    resolution *= 0.5;
                 }
 
+                //console.log("size", input.baseTexture.width, input.baseTexture.height);
+                
+
                 // 高輝度部分を抽出したテクスチャを作る
-                const brightTexture = filterManager.getFilterTexture(input);
                 this._luminosityHighPassFilter.prepare(this.param.luminosityThreshold, this.param.luminositySmoothWidth);
                 this._luminosityHighPassFilter.apply(filterManager, input, brightTexture, clear);
                 //this._luminosityHighPassFilter.apply(filterManager, input, output, clear);
+
+                //console.log("brightTexture", brightTexture.baseTexture.width, brightTexture.baseTexture.height);
 
                 // ブラー適用
                 let inputRenderTarget = brightTexture;
@@ -209,6 +237,8 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
                     const rtV = this._seperableBlurPassVList[i].renderTexture();
                     this._seperableBlurPassHList[i].apply(filterManager, inputRenderTarget, rtH, clear);
                     this._seperableBlurPassVList[i].apply(filterManager, rtH, rtV, clear);
+                    //this._seperableBlurPassHList[i].apply2(filterManager, inputRenderTarget, rtH);
+                    //this._seperableBlurPassVList[i].apply2(filterManager, rtH, rtV);
                     inputRenderTarget = rtV;
                 }
 
@@ -222,12 +252,18 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
              }
 
 
+             //console.log("size", this._seperableBlurPassVList[0].renderTexture().width);
+             //console.log("size", this._seperableBlurPassVList[1].renderTexture().width);
+             //console.log("size", this._seperableBlurPassVList[2].renderTexture().width);
+             //console.log("size", this._seperableBlurPassVList[3].renderTexture().width);
+             //console.log("size", this._seperableBlurPassVList[4].renderTexture().width);
+
              const renderTarget1 = filterManager.getFilterTexture(input);
              const renderTarget2 = filterManager.getFilterTexture(input);
  
              // BlurFilterPass の実装は input を swap で再利用するので、
              // 元の画像が書き換わらないように退避する。
-             this._copyPass.apply(filterManager, input, renderTarget2, (true as any));
+             this._copyPass.apply(filterManager, input, renderTarget2, true);
 
              this.blurXFilter.apply(filterManager, renderTarget2, renderTarget1, clear);//(true as any));
              this.blurYFilter.apply(filterManager, renderTarget1, renderTarget2, clear);//(true as any));
@@ -261,9 +297,15 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
 
 
 
-
+             //const tt = this._seperableBlurPassVList[0].renderTexture();
+             //const tw = tt.width * tt.resolution;
+             //const th = tt.height * tt.resolution;
+             //this._blendPass.uniforms.uSamplerSize = [tw, th, 1.0 / tw, 1.0 / th];
+            // console.log("input", input.width, input.height, input.baseTexture.width, input.baseTexture.height, input.resolution);
+             // console.log("apply", tt.width, tt.height, tt.baseTexture.width, tt.baseTexture.height, tt.resolution, this.legacy);
              this._blendPass.apply(filterManager, renderTarget2, output, clear);
-
+            // this._blendPass.apply(filterManager, tt, output, clear);
+             
 
 
              filterManager.returnFilterTexture(renderTarget1);

@@ -46,6 +46,7 @@ vec3 Bloom(vec2 uv)
 uniform highp vec4 inputSize;
 uniform highp vec4 outputFrame;
 
+//uniform highp vec4 uSamplerSize;
 
 //uniform float size;
 //uniform float amount;
@@ -67,14 +68,17 @@ uniform float    paramF_White;//
 uniform float   Exposure;
 uniform vec4 _Tone;
 
+const float epsilon = 0.00001;
+
 vec3 CalcUncharted2FilmicPreParam( vec3 rgb,
     float paramA, float paramB, float paramCB,
     float paramDE, float paramDF, float paramEperF, float paramF_White )
 {
-    vec3    ret = ((rgb * (paramA * rgb + paramCB) + paramDE)
-        / (rgb * (paramA * rgb + paramB) + paramDF))
-        - paramEperF;
-    return ret / paramF_White;
+    vec3 div = (rgb * (paramA * rgb + paramB) + paramDF);
+    div = max(div, vec3(epsilon, epsilon, epsilon));
+
+    vec3    ret = ((rgb * (paramA * rgb + paramCB) + paramDE) / div) - paramEperF;
+    return ret / max(paramF_White, epsilon);
 }
 
 vec3 Tonemap(vec3 color)
@@ -107,6 +111,7 @@ vec3 LN_CalculateToneColor(vec3 inColor, vec4 inToneColor)
 // PIXI.js は RenderTarget も 2累乗で作る。それを、スクリーンのサイズに正規化するもの。
 vec2 filterTextureCoord() {
     return vTextureCoord * inputSize.xy / outputFrame.zw;
+   // return vTextureCoord * inputSize.xy / outputFrame.zw;
 }
 
 /*
@@ -136,7 +141,11 @@ vec3 vignette(vec3 color, vec2 uv) {
 void main (void) {
     vec2 uv = filterTextureCoord();
     vec4 color1 = texture2D(inputSampler, vTextureCoord);
+    //vec4 color2 = texture2D(uSampler, vTextureCoord);
     vec4 color2 = texture2D(uSampler, vTextureCoord);
+
+    //gl_FragColor = color2;//vec4(gl_FragCoord.x / 1000.0, gl_FragCoord.y / 1000.0, 0, 1);//
+    //return;
 
     float offset = -0.2;    // 中心をちょっと下に下げる
     float r = abs((uv.y * 2.0) - 1.0 + offset);
@@ -146,7 +155,9 @@ void main (void) {
     
     gl_FragColor.rgb += Bloom(vTextureCoord);
 
+
     gl_FragColor.rgb = LN_CalculateToneColor(gl_FragColor.rgb, _Tone);
+
     gl_FragColor.rgb = Tonemap(gl_FragColor.rgb);
     
 

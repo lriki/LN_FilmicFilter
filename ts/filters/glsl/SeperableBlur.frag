@@ -1,4 +1,6 @@
 precision mediump float;
+uniform highp vec4 inputSize;
+uniform highp vec4 outputFrame;
 uniform sampler2D uSampler;
 varying vec2 vTextureCoord;
 
@@ -9,13 +11,17 @@ uniform vec2 _Direction;
 
 #define saturate(x) clamp(x, 0.0, 1.0)
 
+vec2 filterTextureCoord() {
+    return vTextureCoord;// * inputSize.xy / outputFrame.zw;
+}
+
 float Gaussian(float x, float sigma)
 {
     return 0.39894 * exp(-0.5 * x * x / (sigma * sigma)) / sigma;
 }
 
 void main () {
-    vec2 uv = vTextureCoord;
+    vec2 uv = filterTextureCoord();
     vec4 texel = texture2D(uSampler, uv);
     vec2 invSize = 1.0 / _TexSize;
     float fSigma = float(SIGMA);
