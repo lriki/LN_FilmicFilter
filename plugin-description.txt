@@ -10,12 +10,11 @@
 //=============================================================================
 
 /*:ja
- * @plugindesc LN_FilmicFilter v0.0.1
- * @author lriki
+ * @target MZ
+ * @plugindesc LN_FilmicFilter v0.0.1 (MIT License)
+ * @author LRIKI
  *
- * @help test.
- *
- * MIT License
+ * @help グラフィックスをより豊かに見せるための撮影効果を付加します。
  *
  *
  * @command RE.ShowChallengeResult
