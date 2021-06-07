@@ -1,56 +1,12 @@
 import fragment from './glsl/test.frag';
-
 import dat from 'dat.gui';
+//import { Window } from 'nw.gui';
 import { LuminosityHighPassFilter } from "./BloomFilterPass";
 import { SeperableBlurPass } from "./SeperableBlurPass";
 
-class Parameters {
-    public value: number;
-    
-    public linearWhite: number;
-    public shoulderStrength: number;
-    public linearStrength: number;
-    public linearAngle: number;
-    public toeStrength: number;
-    public toeNumerator: number;
-    public toeDenominator: number;
-    public exposure: number;
-    public toneColorR: number;
-    public toneColorG: number;
-    public toneColorB: number;
-    public toneGray: number;
-
-    public luminosityThreshold = 0.9;
-    public luminositySmoothWidth = 0.01;
-    public bloomStrength: number;
-    public bloomRadius: number;
-
-    public vignetteSize: number;
-    public vignetteAmount: number;
-
-    constructor() {
-        this.value = 0
-
-        this.linearWhite = 1.5;
-        this.shoulderStrength = 0.2;
-        this.linearStrength = 0.85;
-        this.linearAngle = 0.01;
-        this.toeStrength = 0.01;
-        this.toeNumerator = 0.01;
-        this.toeDenominator = 1.0;
-        this.exposure = 0.5;
-        this.toneColorR = 0.0;
-        this.toneColorG = 0.0;
-        this.toneColorB = 0.0;
-        this.toneGray = 0.0;
-
-        this.bloomStrength = 0.3;
-        this.bloomRadius = 0.5;
-
-        this.vignetteSize = 0.5;
-        this.vignetteAmount = 0.75;
-    }
-};
+interface HTMLElementEvent<T extends HTMLElement> extends Event {
+    target: T;
+}
 
 class CopyFilterPass extends PIXI.Filter {
     constructor() {
@@ -102,7 +58,6 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
     //private _bloomCompositePass: BloomCompositePass;
 
     gui: dat.GUI;
-    param: Parameters;
 
      /**
       * @param {number} [strength=8] - The strength of the blur filter.
@@ -126,38 +81,100 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
         //this.gui.domElement.addEventListener('mousedown', e => { e.stopImmediatePropagation(); }, true);
 
         guiContainer.style.zIndex = "2";
-        this.param = new Parameters();
 
-        const onSave = {
-            save: () => { alert("clicked"); },
+        const handlers = {
+            save: () => { 
+                const a = document.createElement('a');
+                a.href = 'data:application/json,' + encodeURIComponent(JsonEx.stringify($gameScreen._lnFilmicFilterParams));
+                a.download = '1-Filter.json';
+                a.onchange = e => {
+                    console.log("onchange", e);
+                };
+                a.addEventListener("change", function(evt) {
+                    console.log("go", evt);
+                }, false);
+
+                a.click();
+                /*
+               console.log("cre s");
+               //var nwWindow = require('nw.gui').Window.get();
+               console.log("nwWindow", Window);
+
+                const a = document.createElement('input');
+                var attr = document.createAttribute('nwsaveas')
+                a.attributes.setNamedItem(attr);
+                a.id = "imgSaveDialog";
+                a.accept = "text/plain";
+                a.style.display = "none";
+
+                a.addEventListener('change', function () {
+                    var dist = this.value;
+                    console.log("change");
+                    /*
+                    nwWindow.capturePage(function (buffer) {
+                        fs.writeFile(dist, buffer, 'base64');
+                    }, {
+                        format: 'png',
+                        datatype: 'buffer'
+                    });
+                });
+
+                a.click();
+                console.log("cre e");
+                */
+            },
+            load: () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json, application/json';
+                /*
+                element.addEventListener('click', function(event: any) {
+                    alert(event.target.value); 
+                }, false);
+                */
+                
+                input.onchange = function(event: any) {
+                        const reader = new FileReader();
+                        reader.readAsText(event.target.files[0]);
+                        reader.onload = () => {
+                            const v = reader.result;
+                            if (typeof(v) == "string") {
+                                $gameScreen._lnFilmicFilterParams = JsonEx.parse(v);
+                            }
+                         };
+                };
+                input.click();
+            }
         };
-        this.gui.add(onSave, 'save');
+        this.gui.add(handlers, "save");
+        this.gui.add(handlers, "load");
 
+        const params = $gameScreen._lnFilmicFilterParams;
         const bloom = this.gui.addFolder("bloom");
-        bloom.add(this.param, 'luminosityThreshold', 0.0, 1.0);
-        bloom.add(this.param, 'luminositySmoothWidth', 0.0, 1.0);
-        bloom.add(this.param, 'bloomStrength', 0.0, 1.0);
-        bloom.add(this.param, 'bloomRadius', 0.0, 5.0);
+        bloom.add(params, 'luminosityThreshold', 0.0, 1.0);
+        bloom.add(params, 'luminositySmoothWidth', 0.0, 1.0);
+        bloom.add(params, 'bloomStrength', 0.0, 1.0);
+        bloom.add(params, 'bloomRadius', 0.0, 5.0);
 
         const tonemap = this.gui.addFolder("Tonemap");
-        tonemap.add(this.param, 'linearWhite', 0, 10.0);
-        tonemap.add(this.param, 'shoulderStrength', 0, 10.0);
-        tonemap.add(this.param, 'linearStrength', 0, 10.0);
-        tonemap.add(this.param, 'linearAngle', 0, 2.0);
-        tonemap.add(this.param, 'toeStrength', 0, 1.0);
-        tonemap.add(this.param, 'toeNumerator', 0, 1.0);
-        tonemap.add(this.param, 'toeDenominator', 0, 2.0);
-        tonemap.add(this.param, 'exposure', 0, 2.0);
+        tonemap.add(params, 'linearWhite', 0, 10.0);
+        tonemap.add(params, 'shoulderStrength', 0, 10.0);
+        tonemap.add(params, 'linearStrength', 0, 10.0);
+        tonemap.add(params, 'linearAngle', 0, 2.0);
+        tonemap.add(params, 'toeStrength', 0, 1.0);
+        tonemap.add(params, 'toeNumerator', 0, 1.0);
+        tonemap.add(params, 'toeDenominator', 0, 2.0);
+        tonemap.add(params, 'exposure', 0, 2.0);
 
         const tone = this.gui.addFolder("ColorTone");
-        tone.add(this.param, 'toneColorR', -1.0, 1.0);
-        tone.add(this.param, 'toneColorG', -1.0, 1.0);
-        tone.add(this.param, 'toneColorB', -1.0, 1.0);
-        tone.add(this.param, 'toneGray', 0.0, 1.0);
+        tone.add(params, 'toneColorR', -1.0, 1.0);
+        tone.add(params, 'toneColorG', -1.0, 1.0);
+        tone.add(params, 'toneColorB', -1.0, 1.0);
+        tone.add(params, 'toneGray', 0.0, 1.0);
 
         const vignette = this.gui.addFolder("Vignette");
-        vignette.add(this.param, 'vignetteSize', 0.0, 1.0);
-        vignette.add(this.param, 'vignetteAmount', 0.0, 10.0);
+        vignette.add(params, 'vignetteSize', 0.0, 1.0);
+        vignette.add(params, 'vignetteAmount', 0.0, 10.0);
 
         this.resolution = resolution || PIXI.settings.RESOLUTION;
         this.blurXFilter = new PIXI.filters.BlurFilterPass(true, strength || 8, quality || 4, this.resolution, kernelSize);
@@ -202,6 +219,8 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
           * input.resolution: 1
           */
 
+         const params = $gameScreen._lnFilmicFilterParams;
+
 
          const xStrength = Math.abs(this.blurXFilter.blur);
          const yStrength = Math.abs(this.blurYFilter.blur);
@@ -224,7 +243,7 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
                 
 
                 // 高輝度部分を抽出したテクスチャを作る
-                this._luminosityHighPassFilter.prepare(this.param.luminosityThreshold, this.param.luminositySmoothWidth);
+                this._luminosityHighPassFilter.prepare(params.luminosityThreshold, params.luminositySmoothWidth);
                 this._luminosityHighPassFilter.apply(filterManager, input, brightTexture, clear);
                 //this._luminosityHighPassFilter.apply(filterManager, input, output, clear);
 
@@ -242,7 +261,7 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
                     inputRenderTarget = rtV;
                 }
 
-                this.prepareBloomCompositeParams(this.param.bloomStrength, this.param.bloomRadius, [
+                this.prepareBloomCompositeParams(params.bloomStrength, params.bloomRadius, [
                     this._seperableBlurPassVList[0].renderTexture(),
                     this._seperableBlurPassVList[1].renderTexture(),
                     this._seperableBlurPassVList[2].renderTexture(),
@@ -269,12 +288,12 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
              this.blurYFilter.apply(filterManager, renderTarget1, renderTarget2, clear);//(true as any));
  
              
-             const paramA = this.param.shoulderStrength;  // shoulderStrength
-             const paramB = this.param.linearStrength;  // linearStrength
-             const paramCB = this.param.linearStrength * this.param.linearAngle;    // param.linearStrength * param.linearAngle
-             const paramDE = this.param.toeStrength * this.param.toeNumerator;    // param.toeStrength * param.toeNumerator
-             const paramDF = this.param.toeStrength * this.param.toeDenominator;    // param.toeStrength * param.toeDenominator
-             const paramEperF = this.param.toeNumerator * this.param.toeDenominator;  // param.toeNumerator / param.toeDenominator
+             const paramA = params.shoulderStrength;  // shoulderStrength
+             const paramB = params.linearStrength;  // linearStrength
+             const paramCB = params.linearStrength * params.linearAngle;    // param.linearStrength * param.linearAngle
+             const paramDE = params.toeStrength * params.toeNumerator;    // param.toeStrength * param.toeNumerator
+             const paramDF = params.toeStrength * params.toeDenominator;    // param.toeStrength * param.toeDenominator
+             const paramEperF = params.toeNumerator * params.toeDenominator;  // param.toeNumerator / param.toeDenominator
 
 
              this._blendPass.uniforms.inputSampler = input;
@@ -284,16 +303,16 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
              this._blendPass.uniforms.paramDE = paramDE;
              this._blendPass.uniforms.paramDF = paramDF;
              this._blendPass.uniforms.paramEperF = paramEperF;
-             const w = this.param.linearWhite;
+             const w = params.linearWhite;
              this._blendPass.uniforms.paramF_White = ((w * (paramA * w + paramCB) + paramDE)
                 / (w * (paramA * w + paramB) + paramDF))
                 - paramEperF;
-             this._blendPass.uniforms.Exposure = this.param.exposure;
-             this._blendPass.uniforms._Tone = [this.param.toneColorR, this.param.toneColorG, this.param.toneColorB, this.param.toneGray];
+             this._blendPass.uniforms.Exposure = params.exposure;
+             this._blendPass.uniforms._Tone = [params.toneColorR, params.toneColorG, params.toneColorB, params.toneGray];
 
              
-             this._blendPass.uniforms.size = this.param.vignetteSize;
-             this._blendPass.uniforms.amount = this.param.vignetteAmount;
+             this._blendPass.uniforms.size = params.vignetteSize;
+             this._blendPass.uniforms.amount = params.vignetteAmount;
 
 
 
