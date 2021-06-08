@@ -1,7 +1,12 @@
 
 import "./filters/BlurFilter"
+import "./rmmz/PluginParameters"
 import "./rmmz/Input"
+import "./rmmz/TouchInput"
 import "./rmmz/DataManager"
 import "./rmmz/Game_Screen"
+import "./rmmz/PluginCommands"
+import "./rmmz/Sprite_Animation"
 import "./rmmz/Spriteset_Map"
 import "./rmmz/Spriteset_Battle"
+import "./rmmz/Scene_Boot"

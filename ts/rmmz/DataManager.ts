@@ -1,5 +1,5 @@
 import { FilterFileManager } from "../core/FilterFileManager";
-import { FilterGUI } from "../FilterGUI";
+import { FilterGUI } from "../core/FilterGUI";
 
 const _DataManager_createGameObjects = DataManager.createGameObjects;
 DataManager.createGameObjects = function() {
@@ -12,6 +12,6 @@ DataManager.createGameObjects = function() {
 const _DataManager_isDatabaseLoaded = DataManager.isDatabaseLoaded;
 DataManager.isDatabaseLoaded = function() {
     if (!_DataManager_isDatabaseLoaded.call(this)) return false;
-    if (!FilterFileManager.isIndexLoaded()) return false;
+    if (!FilterFileManager.isLoaded()) return false;
     return true;
 }

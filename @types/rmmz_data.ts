@@ -519,6 +519,37 @@ declare interface IDataMap
     meta: any;
 }
 
+declare interface IDataAnimationRotation {
+    x: number,
+    y: number,
+    z: number,
+}
+
+declare interface IDataAnimationFlashTiming {
+    frame: number,
+    duration: number,
+    color: number[],
+}
+
+declare interface IDataAnimationSoundTiming {
+    frame: number,
+    se: IDataSound,
+}
+
+declare interface IDataAnimation {
+    id: number,
+    displayType: number,
+    effectName: string,
+    flashTimings: IDataAnimationFlashTiming[],
+    name: string,
+    offsetX: number,
+    offsetY: number,
+    rotation: IDataAnimationRotation,
+    scale: number,
+    soundTimings: IDataAnimationSoundTiming[],
+    speed: number,
+}
+
 declare var $dataActors      : IDataActor[];
 declare var $dataClasses     : IDataClass[];
 declare var $dataSkills      : IDataSkill[];
@@ -528,7 +559,7 @@ declare var $dataArmors      : IDataArmor[];
 declare var $dataEnemies     : IDataEnemy[];
 declare var $dataTroops      : IDataTroop[];
 declare var $dataStates      : IDataState[];
-//declare var $dataAnimations  : IDataAnimation[];
+declare var $dataAnimations  : IDataAnimation[];
 declare var $dataTilesets    : IDataTileset[];
 declare var $dataCommonEvents: IDataCommonEvent[];
 declare var $dataSystem      : IDataSystem;

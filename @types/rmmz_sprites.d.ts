@@ -238,5 +238,20 @@ export class Sprite_Character extends Sprite {
 
 }
 
+/**
+ * -----------------------------------------------------------------------------
+ * Sprite_Animation
+ * 
+ * The sprite for displaying an animation.
+ */
+export class Sprite_Animation {
+    _animation: IDataAnimation;
+    _frameIndex: number;
+    _flashColor: number[];
+    _flashDuration: number;
+
+    processFlashTimings(): void;
+}
+
 
 }

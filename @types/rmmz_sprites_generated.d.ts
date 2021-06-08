@@ -179,23 +179,6 @@ declare class Sprite_Enemy {
     new (): Sprite_Enemy;
 }
 
-
-/**
- * -----------------------------------------------------------------------------
- * Sprite_Animation
- * 
- * The sprite for displaying an animation.
- */
-declare class Sprite_Animation {
-        
-    /**
-     * 
-     * @return  
-     */
-    new (): Sprite_Animation;
-}
-
-
 /**
  * -----------------------------------------------------------------------------
  * Sprite_AnimationMV

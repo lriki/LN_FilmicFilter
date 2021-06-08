@@ -1,6 +1,6 @@
 import dat, { GUIController } from 'dat.gui';
-import { FilmicFilterParams } from './core/FilmicFilterData';
-import { LNFilmicFilter } from './core/FilmicFilter';
+import { FilmicFilterParams } from './FilmicFilterData';
+import { FilmicFilter } from './FilmicFilter';
 
 export class FilterGUI {
     private static _gui: dat.GUI | undefined;
@@ -92,7 +92,7 @@ export class FilterGUI {
                             const v = reader.result;
                             if (typeof(v) == "string") {
                                 const params: FilmicFilterParams = JsonEx.parse(v);
-                                LNFilmicFilter.copyParams(params, $gameScreen._lnFilmicFilter.params);
+                                FilmicFilter.copyParams(params, $gameScreen._lnFilmicFilter.params);
                                 FilterGUI.refresh();
                             }
                         };
@@ -114,11 +114,11 @@ export class FilterGUI {
         // コピー時はフィールドを1つずつ代入で設定している。
         
         // 設定退避
-        const orgParams = LNFilmicFilter.makeDefaultParams();
-        LNFilmicFilter.copyParams($gameScreen._lnFilmicFilter.params, orgParams);
+        const orgParams = FilmicFilter.makeDefaultParams();
+        FilmicFilter.copyParams($gameScreen._lnFilmicFilter.params, orgParams);
 
         // GUI 用のデフォルト値を作る
-        LNFilmicFilter.copyParams(LNFilmicFilter.makeGuiDefaultParams(), $gameScreen._lnFilmicFilter.params);
+        FilmicFilter.copyParams(FilmicFilter.makeGuiDefaultParams(), $gameScreen._lnFilmicFilter.params);
         
         const params = $gameScreen._lnFilmicFilter.params;
         const bloom = this._gui.addFolder("bloom");
@@ -147,7 +147,7 @@ export class FilterGUI {
         this._controlers.push(vignette.add(params, 'vignetteSize', 0.0, 1.0));
         this._controlers.push(vignette.add(params, 'vignetteAmount', 0.0, 10.0));
 
-        LNFilmicFilter.copyParams(orgParams, $gameScreen._lnFilmicFilter.params);
+        FilmicFilter.copyParams(orgParams, $gameScreen._lnFilmicFilter.params);
         this.refresh();
     }
 

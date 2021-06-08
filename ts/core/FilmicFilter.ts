@@ -1,6 +1,6 @@
 import { FilmicFilterState, FilmicFilterParams } from "./FilmicFilterData";
 
-export class LNFilmicFilter {
+export class FilmicFilter {
     public static makeDefault(): FilmicFilterState {
         return {
             params: this.makeDefaultParams(),
