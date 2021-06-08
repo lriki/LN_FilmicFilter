@@ -1,5 +1,4 @@
 import fragment from './glsl/test.frag';
-//import { Window } from 'nw.gui';
 import { LuminosityHighPassFilter } from "./BloomFilterPass";
 import { SeperableBlurPass } from "./SeperableBlurPass";
 
@@ -107,7 +106,7 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
           * input.resolution: 1
           */
 
-         const params = $gameScreen._lnFilmicFilterParams;
+         const params = $gameScreen._lnFilmicFilter.params;
 
 
          const xStrength = Math.abs(this.blurXFilter.blur);

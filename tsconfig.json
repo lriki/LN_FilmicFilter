@@ -2,24 +2,16 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es6",
-        //"target": "es5",    // es2015
         "outDir": "dist",
         "strict": true,
         "esModuleInterop": true,
 
-        // NOTE: https://qiita.com/tetradice/items/b89a5dd41fcebf96379e
         "baseUrl": "./",
-        //"paths": {"rmmz": ["types/*"]},
-        //"paths": {"rpgmaker-mz": ["types/rpgmaker-mz"]},
-        "typeRoots" : ["./node_modules/@types", "./@types", "./imgui-js"],
+        "typeRoots" : ["./node_modules/@types", "./@types"],
 
         // for Debug
         "sourceMap": true,
         "declaration": true,
-        
-        "paths": {
-          "imgui-js": [ "../build/imgui" ],
-        },
 
         "lib": [
             "es6",

@@ -1,13 +1,23 @@
-import { Game_LNFilmicFilterParams, Game_LNFilmicFilterParams_Default } from "./Game_LNFilmicFilter";
+import { FilmicFilterState } from "../core/FilmicFilterData";
+import { LNFilmicFilter } from "../core/FilmicFilter";
 
 declare global {
     interface Game_Screen {
-        _lnFilmicFilterParams: Game_LNFilmicFilterParams;
+        _lnFilmicFilter: FilmicFilterState;
     }
 }
 
 const _Game_Screen_prototype_clear = Game_Screen.prototype.clear;
 Game_Screen.prototype.clear = function() {
     _Game_Screen_prototype_clear.call(this);
-    this._lnFilmicFilterParams = Game_LNFilmicFilterParams_Default();
+    if (this._lnFilmicFilter)
+        LNFilmicFilter.clear(this._lnFilmicFilter);
+    else
+        this._lnFilmicFilter = LNFilmicFilter.makeDefault();
+}
+
+const _Game_Screen_prototype_update = Game_Screen.prototype.update;
+Game_Screen.prototype.update = function() {
+    _Game_Screen_prototype_update.call(this);
+    LNFilmicFilter.update(this._lnFilmicFilter);
 }

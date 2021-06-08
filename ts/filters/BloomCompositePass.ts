@@ -18,18 +18,6 @@ export class BloomCompositePass extends PIXI.Filter {
         this.uniforms._BloomTintColorsAndFactors3 = [1.0, 1.0, 1.0, 0.6];
         this.uniforms._BloomTintColorsAndFactors4 = [1.0, 1.0, 1.0, 0.4];
         this.uniforms._BloomTintColorsAndFactors5 = [1.0, 1.0, 1.0, 0.2];
-        /*
-        this.uniforms._BloomTintColorsAndFactors = [
-            [1.0, 1.0, 1.0, 1.0],
-            [1.0, 1.0, 1.0, 0.8],
-            [1.0, 1.0, 1.0, 0.6],
-            [1.0, 1.0, 1.0, 0.4],
-            [1.0, 1.0, 1.0, 0.2],
-            [1.0, 1.0, 1.0, 0.2],
-            [1.0, 1.0, 1.0, 0.2],
-            [1.0, 1.0, 1.0, 0.2],
-        ];
-        */
     }
 }
 

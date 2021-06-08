@@ -1,5 +1,6 @@
 import dat, { GUIController } from 'dat.gui';
-import { Game_LNFilmicFilterParams, Game_LNFilmicFilterParams_copy, Game_LNFilmicFilterParams_Default, Game_LNFilmicFilterParams_guiDefaults } from './rmmz/Game_LNFilmicFilter';
+import { FilmicFilterParams } from './core/FilmicFilterData';
+import { LNFilmicFilter } from './core/FilmicFilter';
 
 export class FilterGUI {
     private static _gui: dat.GUI | undefined;
@@ -36,7 +37,7 @@ export class FilterGUI {
         const handlers = {
             save: () => { 
                 const a = document.createElement('a');
-                a.href = 'data:application/json,' + encodeURIComponent(JsonEx.stringify($gameScreen._lnFilmicFilterParams));
+                a.href = 'data:application/json,' + encodeURIComponent(JsonEx.stringify($gameScreen._lnFilmicFilter.params));
                 a.download = '1-Filter.json';
                 a.onchange = e => {
                     console.log("onchange", e);
@@ -90,11 +91,11 @@ export class FilterGUI {
                         reader.onload = () => {
                             const v = reader.result;
                             if (typeof(v) == "string") {
-                                const params: Game_LNFilmicFilterParams = JsonEx.parse(v);
-                                Game_LNFilmicFilterParams_copy(params, $gameScreen._lnFilmicFilterParams);
+                                const params: FilmicFilterParams = JsonEx.parse(v);
+                                LNFilmicFilter.copyParams(params, $gameScreen._lnFilmicFilter.params);
                                 FilterGUI.refresh();
                             }
-                         };
+                        };
                 };
                 input.click();
             }
@@ -102,15 +103,24 @@ export class FilterGUI {
         this._gui.add(handlers, "save");
         this._gui.add(handlers, "load");
 
+        // dat.GUI は個々のパラメータについて書式を明示的に指定することができない。
+        // 小数点以下の値を表示する場合、初期値として小数部設定済みの値が必要になる。
+        // そのため初期値として 0.1 を設定して各値を作成する。
+        // 
+        // また dat.GUI 内部ではフィールドごとに参照を持っているようで、
+        // オブジェクトを再作成しても古いオブジェクトのフィールドの参照が残ってしまい
+        // 値の編集が効かなくなってしまう。
+        // 対策として Params オブジェクト及び各フィールドのインスタンスが再作成されないように
+        // コピー時はフィールドを1つずつ代入で設定している。
         
         // 設定退避
-        const orgParams = Game_LNFilmicFilterParams_Default();
-        Game_LNFilmicFilterParams_copy($gameScreen._lnFilmicFilterParams, orgParams);
+        const orgParams = LNFilmicFilter.makeDefaultParams();
+        LNFilmicFilter.copyParams($gameScreen._lnFilmicFilter.params, orgParams);
 
         // GUI 用のデフォルト値を作る
-        Game_LNFilmicFilterParams_copy(Game_LNFilmicFilterParams_guiDefaults(), $gameScreen._lnFilmicFilterParams);
+        LNFilmicFilter.copyParams(LNFilmicFilter.makeGuiDefaultParams(), $gameScreen._lnFilmicFilter.params);
         
-        const params = $gameScreen._lnFilmicFilterParams;
+        const params = $gameScreen._lnFilmicFilter.params;
         const bloom = this._gui.addFolder("bloom");
         this._controlers.push(bloom.add(params, 'luminosityThreshold', 0.0, 1.0));
         this._controlers.push(bloom.add(params, 'luminositySmoothWidth', 0.0, 1.0));
@@ -137,7 +147,7 @@ export class FilterGUI {
         this._controlers.push(vignette.add(params, 'vignetteSize', 0.0, 1.0));
         this._controlers.push(vignette.add(params, 'vignetteAmount', 0.0, 10.0));
 
-        Game_LNFilmicFilterParams_copy(orgParams, $gameScreen._lnFilmicFilterParams);
+        LNFilmicFilter.copyParams(orgParams, $gameScreen._lnFilmicFilter.params);
         this.refresh();
     }
 
