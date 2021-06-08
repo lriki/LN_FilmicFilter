@@ -9,7 +9,8 @@ Sprite_Animation.prototype.processFlashTimings = function() {
             const flushColor = timing.color.clone();
             if (flushColor[0] == paramAnimationFlushHookValue) {
                 const params = FilterFileManager.getData(flushColor[1]);
-                FilmicFilter.start($gameScreen._lnFilmicFilter, params, timing.duration);
+                console.log("startFlush");
+                FilmicFilter.startFlush($gameScreen._lnFilmicFilter, params, timing.duration);
             }
             else {
                 this._flashColor = flushColor;

@@ -1,4 +1,5 @@
 import { FilmicFilterState, FilmicFilterParams } from "./FilmicFilterData";
+import { FilterFileManager } from "./FilterFileManager";
 
 export class FilmicFilter {
     public static makeDefault(): FilmicFilterState {
@@ -22,6 +23,15 @@ export class FilmicFilter {
         if (filter.paramsDuration === 0) {
             this.copyParams(filter.params, target);
         }
+    }
+
+    public static startFlush(filter: FilmicFilterState, source: FilmicFilterParams, duration: number) {
+        this.copyParams(source, filter.params);
+        this.start(filter, this.defaultParams(), duration);
+    }
+
+    public static defaultParams(): FilmicFilterParams {
+        return FilterFileManager.getData(0);
     }
     
     public static update(filter: FilmicFilterState) {

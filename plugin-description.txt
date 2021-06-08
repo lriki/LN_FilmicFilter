@@ -17,24 +17,29 @@
  * @help グラフィックスをより豊かに見せるための撮影効果を付加します。
  *
  *
- * @command RE.ShowChallengeResult
- * @text ShowChallengeResult
- * @desc test
+ * @command SetFilmicFilter
+ * @text SetFilmicFilter
+ * @desc フィルタを適用します。
  *
- * @command RE.ShowWarehouse
- * @text ShowWarehouse
- * @desc 引数 actorId に指定した ID のアクターが持つ Inventory を倉庫として、倉庫画面を表示します。
- * @arg actorId
+ * @arg filterId
  * @type number
+ * @default 0
+ * @text フィルタID
+ * @desc 適用するフィルタファイルの番号です。 (例: 2-夕焼け.json の場合は 2 を指定する)
  *
- * @command RE-ProceedFloorForward
- * @text ProceedFloorForward
- * @desc 次のフロアへ
+ * @arg duration
+ * @type number
+ * @default 30
+ * @text 時間
+ * @desc 変化にかける時間です。フレーム単位で指定します。
  *
- * @command RE-ProceedFloorBackword
- * @text ProceedFloorBackword
- * @desc 前のフロアへ
+ * @arg wait
+ * @type boolean
+ * @default true
+ * @text 完了までウェイト
+ * @desc 変化が完了するまでイベントを待機します。
  */
+ 
  
 
  

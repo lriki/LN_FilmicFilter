@@ -14,13 +14,13 @@ export class FilterFileManager {
         this._loadedFileCount = 0;
         this._dataList = [];
 
-        this.loadDataFile("filters/index.json", (obj) => {
+        this.loadDataFile("data/filters/index.json", (obj) => {
             this.fileIndex = (obj as string[]);
             for (let i = 0; i < this.fileIndex.length; i++) {
                 const file = this.fileIndex[i];
                 if (file) {
                     this._fileCount++;
-                    this.loadDataFile(file, (obj) => {
+                    this.loadDataFile("data/filters/" + file, (obj) => {
                         this._dataList[i] = (obj as FilmicFilterParams);
                         this._loadedFileCount++;
                     });
@@ -52,7 +52,7 @@ export class FilterFileManager {
     */
     private static loadDataFile(src: string, onLoad: (obj: any) => void) {
         const xhr = new XMLHttpRequest();
-        const url = "data/" + src;
+        const url = src;
         xhr.open("GET", url);
         xhr.overrideMimeType("application/json");
         xhr.onload = () => this.onXhrLoad(xhr, src, url, onLoad);
@@ -71,11 +71,11 @@ export class FilterFileManager {
     public static updateIndexFile(): void {
         if (this.isNode()) {
             fs.readdir("data/filters", function(err, files){
-                if (err) throw err;
+                if (err) return;
+
                 const fileList = files.filter(function(file) {
-                    return fs.statSync(file).isFile() && /.*\.json$/.test(file);
+                    return /.*\.json$/.test(file);
                 });
-                console.log(fileList);
 
                 const indexData = [];
                 for (const file of fileList) {
