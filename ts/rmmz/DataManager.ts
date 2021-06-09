@@ -4,7 +4,7 @@ import { FilterGUI } from "../core/FilterGUI";
 const _DataManager_createGameObjects = DataManager.createGameObjects;
 DataManager.createGameObjects = function() {
     _DataManager_createGameObjects.call(this);
-    if ($gameTemp.isPlaytest()) {
+    if (FilterGUI.isPlaytest()) {
         FilterGUI.init();
     }
 }

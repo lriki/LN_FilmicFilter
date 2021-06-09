@@ -8,8 +8,8 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const METADATA = fs.readFileSync("./plugin-description.txt").toString();
 
 module.exports = {
-    //mode: 'production',
-    mode: 'development',
+    mode: 'production',
+    //mode: 'development',
     entry: './ts/index.ts',
     target: 'node',
     output: {

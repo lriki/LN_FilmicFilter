@@ -7,6 +7,10 @@ export class FilterGUI {
     private static _hiddedn: boolean;
     private static _controlers: GUIController[];
 
+    public static isPlaytest(): boolean {
+        return $gameTemp && $gameTemp.isPlaytest();
+    }
+
     public static init() {
         if (this._gui) {
             this._gui.destroy();
@@ -47,33 +51,6 @@ export class FilterGUI {
                 }, false);
 
                 a.click();
-                /*
-               console.log("cre s");
-               //var nwWindow = require('nw.gui').Window.get();
-               console.log("nwWindow", Window);
-
-                const a = document.createElement('input');
-                var attr = document.createAttribute('nwsaveas')
-                a.attributes.setNamedItem(attr);
-                a.id = "imgSaveDialog";
-                a.accept = "text/plain";
-                a.style.display = "none";
-
-                a.addEventListener('change', function () {
-                    var dist = this.value;
-                    console.log("change");
-                    /*
-                    nwWindow.capturePage(function (buffer) {
-                        fs.writeFile(dist, buffer, 'base64');
-                    }, {
-                        format: 'png',
-                        datatype: 'buffer'
-                    });
-                });
-
-                a.click();
-                console.log("cre e");
-                */
             },
             load: () => {
                 const input = document.createElement('input');

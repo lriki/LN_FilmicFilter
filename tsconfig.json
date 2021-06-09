@@ -10,8 +10,8 @@
         "typeRoots" : ["./node_modules/@types", "./@types"],
 
         // for Debug
-        "sourceMap": true,
-        "declaration": true,
+        //"sourceMap": true,
+        //"declaration": true,
 
         "lib": [
             "es6",

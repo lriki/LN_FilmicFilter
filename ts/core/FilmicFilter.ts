@@ -21,7 +21,7 @@ export class FilmicFilter {
         this.copyParams(target, filter.targetParams);
         filter.paramsDuration = duration;
         if (filter.paramsDuration === 0) {
-            this.copyParams(filter.params, target);
+            this.copyParams(target, filter.params);
         }
     }
 

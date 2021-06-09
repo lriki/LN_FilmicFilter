@@ -1,4 +1,5 @@
-import { FilterFileManager } from "ts/core/FilterFileManager";
+import { FilmicFilter } from "../core/FilmicFilter";
+import { FilterFileManager } from "../core/FilterFileManager";
 
 var _Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId: number) {
@@ -6,9 +7,10 @@ Game_Map.prototype.setup = function(mapId: number) {
 
     FilterFileManager.setDefaultParams(undefined);
     if ($dataMap.meta) {
-        const id: number | undefined = $dataMap.meta["FilmicFilter"];
+        const id: number | undefined = Number($dataMap.meta["FilmicFilter"]);
         if (id) {
             FilterFileManager.setDefaultParams(FilterFileManager.getData(id));
+            FilmicFilter.start($gameScreen._lnFilmicFilter, FilterFileManager.defaultParams(), 0);
         }
     }
 }
