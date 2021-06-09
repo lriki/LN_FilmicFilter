@@ -8,11 +8,13 @@ export class FilterFileManager {
     private static _fileCount: number;
     private static _loadedFileCount: number;
     private static _dataList: (FilmicFilterParams | undefined)[];
+    private static _defaultParams: FilmicFilterParams | undefined;
 
     public static loadIndex(): void {
         this._fileCount = 0;
         this._loadedFileCount = 0;
         this._dataList = [];
+        this._defaultParams = undefined;
 
         this.loadDataFile("data/filters/index.json", (obj) => {
             this.fileIndex = (obj as string[]);
@@ -31,6 +33,17 @@ export class FilterFileManager {
 
     public static isLoaded(): boolean {
         return !!this.fileIndex && this._fileCount == this._loadedFileCount;
+    }
+
+    public static defaultParams(): FilmicFilterParams {
+        if (this._defaultParams)
+            return this._defaultParams;
+        else
+            return this.getData(0);
+    }
+
+    public static setDefaultParams(params: FilmicFilterParams | undefined): void {
+        this._defaultParams = params;
     }
 
     public static getData(index: number): FilmicFilterParams {
