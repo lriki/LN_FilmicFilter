@@ -24,6 +24,7 @@ export interface FilmicFilterParams {
 }
 
 export interface FilmicFilterState {
+    enabled: boolean;
     params: FilmicFilterParams;
     targetParams: FilmicFilterParams;
     paramsDuration: number;

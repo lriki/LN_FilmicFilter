@@ -27,17 +27,12 @@ class BlurBlendFilterPass extends PIXI.Filter {
 const MIPS = 5;
 const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
 
-/**
- * The BlurFilter applies a Gaussian blur to an object.
- *
- * The strength of the blur can be set for the x-axis and y-axis separately.
- *
- * @class
- * @extends PIXI.Filter
- * @memberof PIXI.filters
- */
- export class BlurFilter extends PIXI.Filter
- {
+
+export class FilmicFilter extends PIXI.Filter
+{
+    public static instance: FilmicFilter;
+
+
     public blurXFilter: PIXI.filters.BlurFilterPass;
     public blurYFilter: PIXI.filters.BlurFilterPass;
 
@@ -52,26 +47,17 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
     //private _bloomCompositePass: BloomCompositePass;
 
 
-     /**
-      * @param {number} [strength=8] - The strength of the blur filter.
-      * @param {number} [quality=4] - The quality of the blur filter.
-      * @param {number} [resolution] - The resolution of the blur filter.
-      * @param {number} [kernelSize=5] - The kernelSize of the blur filter.Options: 5, 7, 9, 11, 13, 15.
-      */
      constructor(strength?: number, quality?: number, resolution?: number, kernelSize?: number)
      {
         super();
-
 
         this.resolution = resolution || PIXI.settings.RESOLUTION;
         this.blurXFilter = new PIXI.filters.BlurFilterPass(true, strength || 8, quality || 4, this.resolution, kernelSize);
         this.blurYFilter = new PIXI.filters.BlurFilterPass(false, strength || 8, quality || 4, this.resolution, kernelSize);
 
-
         this._repeatEdgePixels = false;
         this.updatePadding();
 
-        // ★ .d がプロパティになっていなかったので
         this.blendMode = this.blurYFilter.blendMode;
         this._copyPass = new CopyFilterPass();
         this._blendPass = new BlurBlendFilterPass();
@@ -84,20 +70,11 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
             this._seperableBlurPassHList.push(new SeperableBlurPass(kernelSizeArray[i], kernelSizeArray[i], true));
             this._seperableBlurPassVList.push(new SeperableBlurPass(kernelSizeArray[i], kernelSizeArray[i], false));
         }
-
-         //this._bloomCompositePass = new BloomCompositePass();
      }
  
-     /**
-      * Applies the filter.
-      *
-      * @param {PIXI.systems.FilterSystem} filterManager - The manager.
-      * @param {PIXI.RenderTexture} input - The input target.
-      * @param {PIXI.RenderTexture} output - The output target.
-      */
-     //apply(filterManager: PIXI.systems.FilterSystem, input: PIXI.RenderTexture, output: PIXI.RenderTexture, clear: boolean | PIXI.CLEAR_MODES)
      apply(filterManager: PIXI.systems.FilterSystem, input: PIXI.RenderTexture, output: PIXI.RenderTexture, clear: boolean, currentState?: any): void
      {
+
          /* input は次のような状態で渡されてくる。
           * input.width: 816
           * input.height: 624

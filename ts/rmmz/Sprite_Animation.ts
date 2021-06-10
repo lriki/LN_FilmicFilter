@@ -1,4 +1,4 @@
-import { FilmicFilter } from "../core/FilmicFilter";
+import { FilmicFilterControl } from "../core/FilmicFilterControl";
 import { FilterFileManager } from "../core/FilterFileManager";
 import { paramAnimationFlushHookValue } from "./PluginParameters";
 
@@ -9,7 +9,7 @@ Sprite_Animation.prototype.processFlashTimings = function() {
             const flushColor = timing.color.clone();
             if (flushColor[3] == paramAnimationFlushHookValue) {
                 const params = FilterFileManager.getData(flushColor[0]);
-                FilmicFilter.startFlush($gameScreen._lnFilmicFilter, params, timing.duration);
+                FilmicFilterControl.startFlush($gameScreen._lnFilmicFilter, params, timing.duration);
             }
             else {
                 this._flashColor = flushColor;

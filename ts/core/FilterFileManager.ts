@@ -57,18 +57,7 @@ export class FilterFileManager {
         }
         return params;
     }
-
-    /*
-    public static loadFilterParams(fileNumber: number, loaded: (params: FilmicFilterParams) => void): void {
-        const files = this.fileIndex;
-        if (files && files[fileNumber]) {
-            this.loadDataFile(files[fileNumber], (obj) => loaded(obj as FilmicFilterParams));
-        }
-        else {
-            throw new Error("Filter index file not loaded.");
-        }
-    }
-    */
+    
     private static loadDataFile(src: string, onLoad: (obj: any) => void, onError: () => void) {
         const xhr = new XMLHttpRequest();
         const url = src;
@@ -116,7 +105,6 @@ export class FilterFileManager {
                     onEnd();
                 });
             });
-
         }
         else {
             onEnd();

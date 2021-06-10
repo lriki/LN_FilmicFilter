@@ -1,6 +1,6 @@
 import dat, { GUIController } from 'dat.gui';
 import { FilmicFilterParams } from './FilmicFilterData';
-import { FilmicFilter } from './FilmicFilter';
+import { FilmicFilterControl } from './FilmicFilterControl';
 
 export class FilterGUI {
     private static _gui: dat.GUI | undefined;
@@ -20,23 +20,16 @@ export class FilterGUI {
         this._hiddedn = true;
         this._controlers = [];
 
-
         const element = document.getElementById("gameCanvas");
         if (!element) throw new Error("gameCanvas element not found.");
 
         this._gui = new dat.GUI({ autoPlace: true, hideable: true });
-        //this._gui.domElement = element;
-        //element.append(this._gui.domElement);
         const guiContainer = this._gui.domElement.parentElement;
         if (!guiContainer) throw new Error("guiContainer element not found.");
 
-        //this._gui.domElement.addEventListener('mousedown', e => { e.stopImmediatePropagation(); }, true);
-
-        guiContainer.style.zIndex = "2";
+        guiContainer.style.zIndex = "20";
 
         this._gui.hide();
-
-        //this._gui.
         
         const handlers = {
             save: () => { 
@@ -56,11 +49,6 @@ export class FilterGUI {
                 const input = document.createElement('input');
                 input.type = 'file';
                 input.accept = '.json, application/json';
-                /*
-                element.addEventListener('click', function(event: any) {
-                    alert(event.target.value); 
-                }, false);
-                */
                 
                 input.onchange = function(event: any) {
                         const reader = new FileReader();
@@ -69,7 +57,7 @@ export class FilterGUI {
                             const v = reader.result;
                             if (typeof(v) == "string") {
                                 const params: FilmicFilterParams = JsonEx.parse(v);
-                                FilmicFilter.copyParams(params, $gameScreen._lnFilmicFilter.params);
+                                FilmicFilterControl.copyParams(params, $gameScreen._lnFilmicFilter.params);
                                 FilterGUI.refresh();
                             }
                         };
@@ -91,11 +79,11 @@ export class FilterGUI {
         // コピー時はフィールドを1つずつ代入で設定している。
         
         // 設定退避
-        const orgParams = FilmicFilter.makeDefaultParams();
-        FilmicFilter.copyParams($gameScreen._lnFilmicFilter.params, orgParams);
+        const orgParams = FilmicFilterControl.makeDefaultParams();
+        FilmicFilterControl.copyParams($gameScreen._lnFilmicFilter.params, orgParams);
 
         // GUI 用のデフォルト値を作る
-        FilmicFilter.copyParams(FilmicFilter.makeGuiDefaultParams(), $gameScreen._lnFilmicFilter.params);
+        FilmicFilterControl.copyParams(FilmicFilterControl.makeGuiDefaultParams(), $gameScreen._lnFilmicFilter.params);
         
         const params = $gameScreen._lnFilmicFilter.params;
         const bloom = this._gui.addFolder("bloom");
@@ -124,7 +112,7 @@ export class FilterGUI {
         this._controlers.push(vignette.add(params, 'vignetteSize', 0.0, 1.0));
         this._controlers.push(vignette.add(params, 'vignetteAmount', 0.0, 10.0));
 
-        FilmicFilter.copyParams(orgParams, $gameScreen._lnFilmicFilter.params);
+        FilmicFilterControl.copyParams(orgParams, $gameScreen._lnFilmicFilter.params);
         this.refresh();
     }
 

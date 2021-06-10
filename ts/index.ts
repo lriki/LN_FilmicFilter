@@ -1,5 +1,5 @@
 
-import "./filters/BlurFilter"
+import "./filters/FilmicFilter"
 import "./rmmz/PluginParameters"
 import "./rmmz/Input"
 import "./rmmz/TouchInput"
