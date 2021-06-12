@@ -11,6 +11,8 @@ FilmicFilter
 |---------|------|
 | v1.0.0  | [:arrow_down: LN_FilmicFilter.js](https://raw.githubusercontent.com/lriki/LN_FilmicFilter/master/js/plugins/LN_FilmicFilter.js) |
 
+<span style="color: red; ">コアスクリプトは最新バージョンにしてください。少なくとも v1.0.0 では正しく表示できないことがあります。このプラグインは v1.2.1 で動作確認を行っています。</span>
+
 サンプルプロジェクト
 ----------
 
