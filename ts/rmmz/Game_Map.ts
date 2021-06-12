@@ -5,7 +5,7 @@ var _Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId: number) {
     _Game_Map_setup.call(this, mapId);
 
-    FilterFileManager.setDefaultParams(undefined);
+    FilterFileManager.setUserDefaultParams(undefined);
     $gameScreen._lnFilmicFilter.enabled = true;
     if ($dataMap.meta) {
         const value = $dataMap.meta["FilmicFilter"];
@@ -13,12 +13,13 @@ Game_Map.prototype.setup = function(mapId: number) {
             $gameScreen._lnFilmicFilter.enabled = false;
         }
         else {
-            const id: number | undefined = Number(value);
+            let id: number = (value === undefined) ? 0 : Number(value);
+
             if (id <= -1) {
                 $gameScreen._lnFilmicFilter.enabled = false;
             }
             else if (id !== undefined) {
-                FilterFileManager.setDefaultParams(FilterFileManager.getData(id));
+                FilterFileManager.setUserDefaultParams(FilterFileManager.getData(id));
                 FilmicFilterControl.start($gameScreen._lnFilmicFilter, FilterFileManager.defaultParams(), 0);
             }
         }

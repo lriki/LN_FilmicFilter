@@ -1,19 +1,20 @@
 import fs from "fs";
 import path from "path";
 import { FilmicFilterParams } from "ts/core/FilmicFilterData";
+import { FilmicFilterControl } from "./FilmicFilterControl";
 
 export class FilterFileManager {
     public static fileIndex: (string | undefined)[] | undefined;
     private static _fileCount: number;
     private static _loadedFileCount: number;
     private static _dataList: (FilmicFilterParams | undefined)[];
-    private static _defaultParams: FilmicFilterParams | undefined;
+    private static _userDefaultParams: FilmicFilterParams | undefined;
 
     public static loadIndex(): void {
         this._fileCount = -1;
         this._loadedFileCount = 0;
         this._dataList = [];
-        this._defaultParams = undefined;
+        this._userDefaultParams = undefined;
 
         this.loadDataFile("data/filters/index.json", (obj) => {
             this.fileIndex = (obj as string[]);
@@ -36,20 +37,25 @@ export class FilterFileManager {
     }
 
     public static defaultParams(): FilmicFilterParams {
-        if (this._defaultParams)
-            return this._defaultParams;
+        if (this._userDefaultParams)
+            return this._userDefaultParams;
         else
             return this.getData(0);
     }
 
-    public static setDefaultParams(params: FilmicFilterParams | undefined): void {
-        this._defaultParams = params;
+    public static setUserDefaultParams(params: FilmicFilterParams | undefined): void {
+        this._userDefaultParams = params;
     }
 
     public static getData(index: number): FilmicFilterParams {
         const params = this._dataList[index];
         if (!params) {
-            throw new Error(`ID:${index} の FilmicFilter 設定ファイルが見つかりませんでした。`);
+            if (index === 0) {
+                return FilmicFilterControl.makeDefaultParams();
+            }
+            else {
+                throw new Error(`ID:${index} の FilmicFilter 設定ファイルが見つかりませんでした。`);
+            }
         }
         return params;
     }

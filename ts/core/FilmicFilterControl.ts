@@ -4,7 +4,7 @@ import { FilterFileManager } from "./FilterFileManager";
 export class FilmicFilterControl {
     public static makeDefault(): FilmicFilterState {
         return {
-            enabled: false,
+            enabled: true,
             params: this.makeDefaultParams(),
             targetParams: this.makeDefaultParams(),
             paramsDuration: 0.0,
@@ -13,7 +13,7 @@ export class FilmicFilterControl {
 
     public static clear(filter: FilmicFilterState) {
         const d = this.makeDefaultParams();
-        filter.enabled = false;
+        filter.enabled = true;
         this.copyParams(d, filter.params);
         this.copyParams(d, filter.targetParams);
         filter.paramsDuration = 0.0;
