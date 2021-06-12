@@ -4,7 +4,6 @@ uniform sampler2D inputSampler;
 uniform sampler2D uSampler;
 varying vec2 vTextureCoord;
 
-
 //--------------------------------------------------------------------------------
 // Bloom
 
@@ -46,10 +45,6 @@ vec3 Bloom(vec2 uv)
 uniform highp vec4 inputSize;
 uniform highp vec4 outputFrame;
 
-//uniform highp vec4 uSamplerSize;
-
-//uniform float size;
-//uniform float amount;
 uniform float size;
 uniform float amount;
 const float focalPointX = 0.5;
@@ -93,7 +88,7 @@ vec3 Tonemap(vec3 color)
 }
 
 
-vec3 LN_CalculateToneColor(vec3 inColor, vec4 inToneColor)
+vec3 calculateToneColor(vec3 inColor, vec4 inToneColor)
 {
     vec3 outColor = inColor;
     float y = (0.208012 * outColor.r + 0.586611 * inColor.g + 0.114478 * inColor.b) * inToneColor.w;
@@ -101,36 +96,11 @@ vec3 LN_CalculateToneColor(vec3 inColor, vec4 inToneColor)
     return saturate(outColor);
 }
 
-
-
-/*
-*/
-
-
 // https://github.com/pixijs/pixijs/wiki/v5-Creating-filters#conversion-functions
 // PIXI.js は RenderTarget も 2累乗で作る。それを、スクリーンのサイズに正規化するもの。
 vec2 filterTextureCoord() {
     return vTextureCoord * inputSize.xy / outputFrame.zw;
-   // return vTextureCoord * inputSize.xy / outputFrame.zw;
 }
-
-/*
-const float Exposure = 0.3;
-const int isGamma = 0;
-
-vec3 CalcFilmic(vec3 rgb_input)
-{
-    float expBias = exp2(Exposure);
-    vec3 rgb = rgb_input * expBias;
-
-    vec3 x = max(vec3(0.0, 0.0, 0.0), rgb - 0.004);
-    vec3 ret = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
-    if (isGamma == 0) {
-        ret = pow(ret, vec3(2.2));
-    }
-    return ret;
-}
-*/
 
 vec3 vignette(vec3 color, vec2 uv) {
     float dist = distance(uv, vec2(focalPointX, focalPointY));
@@ -141,35 +111,20 @@ vec3 vignette(vec3 color, vec2 uv) {
 void main (void) {
     vec2 uv = filterTextureCoord();
     vec4 color1 = texture2D(inputSampler, vTextureCoord);
-    //vec4 color2 = texture2D(uSampler, vTextureCoord);
     vec4 color2 = texture2D(uSampler, vTextureCoord);
 
-    //gl_FragColor = color2;//vec4(gl_FragCoord.x / 1000.0, gl_FragCoord.y / 1000.0, 0, 1);//
-    //return;
-
+    // Tilt
     float offset = -0.2;    // 中心をちょっと下に下げる
     float r = abs((uv.y * 2.0) - 1.0 + offset);
-    //r -= 0.5;
-                //' float r = (uv.y * 2.0) - 1.0;
     gl_FragColor = mix(color1, color2, saturate(r));
     
     gl_FragColor.rgb += Bloom(vTextureCoord);
 
 
-    gl_FragColor.rgb = LN_CalculateToneColor(gl_FragColor.rgb, _Tone);
+    gl_FragColor.rgb = calculateToneColor(gl_FragColor.rgb, _Tone);
 
     gl_FragColor.rgb = Tonemap(gl_FragColor.rgb);
     
 
     gl_FragColor.rgb = vignette(gl_FragColor.rgb, uv);
-
-    //gl_FragColor = vec4(r, 0, 0, 1);
-                //' gl_FragColor = color1;
-                
-    //--------------------
-    // Gamma
-    //if (_gammaEnabled) {
-        //gl_FragColor.rgb = pow(gl_FragColor.rgb, vec3(1.0 / 2.2));
-        //gl_FragColor.rgb = pow(gl_FragColor.rgb, vec3(2.2));
-    //}
 }

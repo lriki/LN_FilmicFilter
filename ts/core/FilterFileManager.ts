@@ -25,13 +25,9 @@ export class FilterFileManager {
                     this.loadDataFile("data/filters/" + file, (obj) => {
                         this._dataList[i] = (obj as FilmicFilterParams);
                         this._loadedFileCount++;
-                    }, () => {
-                        DataManager.onXhrError("", "file", file);
                     });
                 }
             }
-        }, () => {
-            console.log("not found?");
         });
     }
 
@@ -58,13 +54,13 @@ export class FilterFileManager {
         return params;
     }
     
-    private static loadDataFile(src: string, onLoad: (obj: any) => void, onError: () => void) {
+    private static loadDataFile(src: string, onLoad: (obj: any) => void) {
         const xhr = new XMLHttpRequest();
         const url = src;
         xhr.open("GET", url);
         xhr.overrideMimeType("application/json");
         xhr.onload = () => this.onXhrLoad(xhr, src, url, onLoad);
-        xhr.onerror = onError;//DataManager.onXhrError(src, src, url);
+        xhr.onerror =  () => DataManager.onXhrError(src, src, url);
         xhr.send();
     }
     

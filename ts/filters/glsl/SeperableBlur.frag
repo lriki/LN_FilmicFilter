@@ -12,7 +12,7 @@ uniform vec2 _Direction;
 #define saturate(x) clamp(x, 0.0, 1.0)
 
 vec2 filterTextureCoord() {
-    return vTextureCoord;// * inputSize.xy / outputFrame.zw;
+    return vTextureCoord;
 }
 
 float Gaussian(float x, float sigma)
@@ -27,7 +27,7 @@ void main () {
     float fSigma = float(SIGMA);
     float weightSum = Gaussian(0.0, fSigma);
     vec3 diffuseSum = texel.rgb * weightSum;
-    for( int i = 1; i < 5/*KERNEL_RADIUS*/; i ++ ) {
+    for( int i = 1; i < 5/*KERNEL_RADIUS*/; i ++ ) {    // TODO: KERNEL_RADIUS
         float x = float(i);
         float w = Gaussian(x, fSigma);
         vec2 uvOffset = _Direction * invSize * x;

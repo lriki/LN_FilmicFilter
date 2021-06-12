@@ -16,6 +16,8 @@
  *
  * @help グラフィックスをより豊かに見せるための撮影効果を付加します。
  *
+ * 使い方は次のページを参照してください。
+ * https://github.com/lriki/LN_FilmicFilter/blob/main/README.md
  *
  * @command SetFilmicFilter
  * @text SetFilmicFilter

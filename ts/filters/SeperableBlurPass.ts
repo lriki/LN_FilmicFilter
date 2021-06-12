@@ -29,9 +29,7 @@ export class SeperableBlurPass extends PIXI.Filter {
         
         this._renderTarget = filterManager.getFilterTexture(input, resolution);
         
-
         this.uniforms._TexSize = [input.width, input.height];
-
     }
 
     public retain(filterManager: PIXI.systems.FilterSystem): void {
@@ -54,6 +52,5 @@ export class SeperableBlurPass extends PIXI.Filter {
         
         this.state.blend = true;
     }
-
 }
 

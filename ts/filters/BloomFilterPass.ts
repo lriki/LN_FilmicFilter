@@ -9,6 +9,5 @@ export class LuminosityHighPassFilter extends PIXI.Filter {
         this.uniforms._LuminosityThreshold = luminosityThreshold;
         this.uniforms._SmoothWidth = luminositySmoothWidth;
     }
-
 }
 
