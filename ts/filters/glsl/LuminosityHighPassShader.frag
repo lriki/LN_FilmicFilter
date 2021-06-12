@@ -12,7 +12,6 @@ uniform float _SmoothWidth;
 #define saturate(x) clamp(x, 0.0, 1.0)
 
 vec2 filterTextureCoord() {
-    //return vTextureCoord * inputSize.xy / outputFrame.zw;
     return vTextureCoord;
 }
 
