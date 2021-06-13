@@ -11,13 +11,16 @@
 
 /*:ja
  * @target MZ
- * @plugindesc LN_FilmicFilter v1.0.0 (MIT License)
+ * @plugindesc LN_FilmicFilter v1.0.1 (MIT License)
  * @author LRIKI
  *
  * @help グラフィックスをより豊かに見せるための撮影効果を付加します。
  *
  * 使い方は次のページを参照してください。
  * https://github.com/lriki/LN_FilmicFilter/blob/main/README.md
+ *
+ * 変更履歴は次のページを参照してください。
+ * https://github.com/lriki/LN_FilmicFilter/releases
  *
  * @command SetFilmicFilter
  * @text SetFilmicFilter
