@@ -161,9 +161,11 @@ export class FilmicFilter extends PIXI.Filter
             filterManager.returnFilterTexture(renderTarget2);
 
             for (let i = 0; i < MIPS; i++) {
-            this._seperableBlurPassHList[i].retain(filterManager);
-            this._seperableBlurPassVList[i].retain(filterManager);
+                this._seperableBlurPassHList[i].retain(filterManager);
+                this._seperableBlurPassVList[i].retain(filterManager);
             }
+
+            filterManager.returnFilterTexture(brightTexture);
         }
     }
 
