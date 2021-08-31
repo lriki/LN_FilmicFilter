@@ -9,7 +9,7 @@ RPGツクールMZ用 ジオラマ風の撮影効果プラグイン
 
 | Version | File |
 |---------|------|
-| v1.0.1  | [:arrow_down: LN_FilmicFilter.js](https://raw.githubusercontent.com/lriki/LN_FilmicFilter/master/js/plugins/LN_FilmicFilter.js) |
+| v1.0.2  | [:arrow_down: LN_FilmicFilter.js](https://raw.githubusercontent.com/lriki/LN_FilmicFilter/master/js/plugins/LN_FilmicFilter.js) |
 
 > ⚠ コアスクリプトは最新バージョンにしてください。少なくとも v1.0.0 では正しく表示できないことがあります。このプラグインは v1.2.1 で動作確認を行っています。
 
@@ -67,6 +67,13 @@ RPGツクールMZ でプロジェクトを新規作成した後、次のファ�
 注意点
 ----------
 
-このプラグインは一部、UnrealEngine のようなハイエンド向けゲームエンジンと似た仕組みで作られています。そのため現バージョンではややマシンスペックを要求するかもしれません。
+のプラグインは一部、UnrealEngine のようなハイエンド向けゲームエンジンと似た仕組みで作られています。そのため現バージョンではややマシンスペックを要求するかもしれません。
 
-不具合等、報告の際は問題が発生しているマシンの情報を併記いただけると助かります。(OS, CPU, RAM, GPU等)
+不具合報告の際は次のような、問題が発生している環境の情報を併記いただけると助かります。
+
+* マシンの情報 (OS, CPU, RAM, GPU 等)
+* 実行環境 (デスクトップ, Web 等)
+
+既知の不具合や要望は [こちらのページ](https://github.com/lriki/LN_FilmicFilter/issues) を参照してください。
+
+
