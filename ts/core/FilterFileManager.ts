@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import { FilmicFilterParams } from "ts/core/FilmicFilterData";
 import { FilmicFilterControl } from "./FilmicFilterControl";
 
@@ -80,12 +78,15 @@ export class FilterFileManager {
 
     public static updateIndexFile(onEnd: () => void): void {
         if (this.isNode()) {
-            fs.mkdir("data/filters", (err) => { // 成否にかかわらずコールバックは呼び出される
-                fs.readdir("data/filters", function(err, files) {
+            const fs = require("fs");
+            const path = require("path");
+
+            fs.mkdir("data/filters", (err: NodeJS.ErrnoException | null) => { // 成否にかかわらずコールバックは呼び出される
+                fs.readdir("data/filters", function(err: NodeJS.ErrnoException | null, files: string[]) {
                     const indexData = [];
     
                     if (!err) {
-                        const fileList = files.filter(function(file) {
+                        const fileList = files.filter(function(file: string) {
                             return /.*\.json$/.test(file);
                         });
         
@@ -114,6 +115,11 @@ export class FilterFileManager {
     }
 
     public static isNode(): boolean {
-        return (process.title !== 'browser');
+        if (typeof process !== 'undefined') {
+            return (process.title !== 'browser');
+        }
+        else {
+            return false;
+        }
     }
 }
