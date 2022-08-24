@@ -25,6 +25,12 @@
  * 既知の不具合や要望は次のページを参照してください。
  * https://github.com/lriki/LN_FilmicFilter/issues
  *
+ * @param EditorKey
+ * @text エディタの表示キー
+ * @desc デフォルトのF11キーでエディタが表示できない場合に、キーを変更できます。例えば A キーで表示する場合 a と入力してください。
+ * @default F11
+ * @type string
+ *
  * @command SetFilmicFilter
  * @text SetFilmicFilter
  * @desc フィルタを適用します。
