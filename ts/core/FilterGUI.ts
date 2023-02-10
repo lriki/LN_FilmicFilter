@@ -37,12 +37,9 @@ export class FilterGUI {
                 a.href = 'data:application/json,' + encodeURIComponent(JsonEx.stringify($gameScreen._lnFilmicFilter.params));
                 a.download = '1-Filter.json';
                 a.onchange = e => {
-                    console.log("onchange", e);
                 };
                 a.addEventListener("change", function(evt) {
-                    console.log("go", evt);
                 }, false);
-
                 a.click();
             },
             load: () => {
@@ -86,7 +83,7 @@ export class FilterGUI {
         FilmicFilterControl.copyParams(FilmicFilterControl.makeGuiDefaultParams(), $gameScreen._lnFilmicFilter.params);
         
         const params = $gameScreen._lnFilmicFilter.params;
-        const bloom = this._gui.addFolder("bloom");
+        const bloom = this._gui.addFolder("Bloom");
         this._controlers.push(bloom.add(params, 'luminosityThreshold', 0.0, 1.0));
         this._controlers.push(bloom.add(params, 'luminositySmoothWidth', 0.0, 1.0));
         this._controlers.push(bloom.add(params, 'bloomStrength', 0.0, 1.0));
@@ -111,6 +108,10 @@ export class FilterGUI {
         const vignette = this._gui.addFolder("Vignette");
         this._controlers.push(vignette.add(params, 'vignetteSize', 0.0, 1.0));
         this._controlers.push(vignette.add(params, 'vignetteAmount', 0.0, 10.0));
+
+        const tilt = this._gui.addFolder("TiltShift");
+        this._controlers.push(tilt.add(params, 'tiltScale', 0.0, 5.0));
+        this._controlers.push(tilt.add(params, 'tiltOffset', -1.0, 1.0));
 
         FilmicFilterControl.copyParams(orgParams, $gameScreen._lnFilmicFilter.params);
         this.refresh();

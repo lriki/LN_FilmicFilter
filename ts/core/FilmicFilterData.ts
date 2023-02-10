@@ -21,6 +21,9 @@ export interface FilmicFilterParams {
 
     vignetteSize: number;
     vignetteAmount: number;
+
+    tiltScale: number;
+    tiltOffset: number;
 }
 
 export interface FilmicFilterState {

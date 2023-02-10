@@ -63,6 +63,9 @@ export class FilmicFilterControl {
             c.vignetteSize = this.mix(c.vignetteSize, t.vignetteSize, d);
             c.vignetteAmount = this.mix(c.vignetteAmount, t.vignetteAmount, d);
 
+            c.tiltScale = this.mix(c.tiltScale, t.tiltScale, d);
+            c.tiltOffset = this.mix(c.tiltOffset, t.vignetteAmount, d);
+
             filter.paramsDuration--;
         }
     }
@@ -98,6 +101,9 @@ export class FilmicFilterControl {
     
             vignetteSize: 0.5,
             vignetteAmount: 0.75,
+
+            tiltOffset: -0.2,
+            tiltScale: 2.0,
         };
     }
         
@@ -124,6 +130,9 @@ export class FilmicFilterControl {
 
             vignetteSize: 0.1,
             vignetteAmount: 0.1,
+
+            tiltOffset: -0.2,
+            tiltScale: 2.0,
         };
     }
 
@@ -150,6 +159,15 @@ export class FilmicFilterControl {
 
         dst.vignetteSize = src.vignetteSize;
         dst.vignetteAmount = src.vignetteAmount;
+
+        if (src.tiltOffset !== undefined) dst.tiltOffset = src.tiltOffset;
+        if (src.tiltScale !== undefined) dst.tiltScale = src.tiltScale;
+    }
+
+    public static resolveUndefiedParams(params: FilmicFilterParams): FilmicFilterParams {
+        const p = this.makeDefaultParams();
+        this.copyParams(params, p);
+        return p;
     }
 }
 

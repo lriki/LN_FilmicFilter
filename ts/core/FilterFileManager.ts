@@ -22,7 +22,7 @@ export class FilterFileManager {
                 if (file) {
                     this._fileCount++;
                     this.loadDataFile("data/filters/" + file, (obj) => {
-                        this._dataList[i] = (obj as FilmicFilterParams);
+                        this._dataList[i] = FilmicFilterControl.resolveUndefiedParams(obj as FilmicFilterParams);
                         this._loadedFileCount++;
                     });
                 }

@@ -63,6 +63,10 @@ uniform float    paramF_White;//
 uniform float   Exposure;
 uniform vec4 _Tone;
 
+// TiltShift Params
+uniform float _TiltOffset;  // = -0.2 // 中心をちょっと下に下げる
+uniform float _TiltScale;   // = 2.0
+
 const float epsilon = 0.00001;
 
 vec3 CalcUncharted2FilmicPreParam( vec3 rgb,
@@ -114,8 +118,7 @@ void main (void) {
     vec4 color2 = texture2D(uSampler, vTextureCoord);
 
     // Tilt
-    float offset = -0.2;    // 中心をちょっと下に下げる
-    float r = abs((uv.y * 2.0) - 1.0 + offset);
+    float r = abs((uv.y * 2.0) - 1.0 + _TiltOffset) * _TiltScale;
     gl_FragColor = mix(color1, color2, saturate(r));
     
     gl_FragColor.rgb += Bloom(vTextureCoord);

@@ -155,6 +155,9 @@ export class FilmicFilter extends PIXI.Filter
             this._blendPass.uniforms.size = params.vignetteSize;
             this._blendPass.uniforms.amount = params.vignetteAmount;
 
+            this._blendPass.uniforms._TiltScale = params.tiltScale;
+            this._blendPass.uniforms._TiltOffset = params.tiltOffset;
+
             this._blendPass.apply(filterManager, renderTarget2, output, clear);
 
             filterManager.returnFilterTexture(renderTarget1);
