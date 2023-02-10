@@ -9,7 +9,7 @@ RPGツクールMZ用 ジオラマ風の撮影効果プラグイン
 
 | Version | File |
 |---------|------|
-| v1.0.2  | [:arrow_down: LN_FilmicFilter.js](https://raw.githubusercontent.com/lriki/LN_FilmicFilter/master/js/plugins/LN_FilmicFilter.js) |
+| v1.1.0  | [:arrow_down: LN_FilmicFilter.js](https://raw.githubusercontent.com/lriki/LN_FilmicFilter/master/js/plugins/LN_FilmicFilter.js) |
 
 > ⚠ コアスクリプトは最新バージョンにしてください。少なくとも v1.0.0 では正しく表示できないことがあります。このプラグインは v1.2.1 で動作確認を行っています。
 

@@ -11,7 +11,7 @@
 
 /*:ja
  * @target MZ
- * @plugindesc LN_FilmicFilter v1.0.2 (MIT License)
+ * @plugindesc LN_FilmicFilter v1.1.0 (MIT License)
  * @author LRIKI
  *
  * @help グラフィックスをより豊かに見せるための撮影効果を付加します。

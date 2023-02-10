@@ -4,8 +4,8 @@
     "chromium-args": "--force-color-profile=srgb",
     "window": {
         "title": "FilmicFilter",
-        "width": 1280,
-        "height": 960,
+        "width": 816,
+        "height": 624,
         "position": "center",
         "icon": "icon/icon.png"
     }
