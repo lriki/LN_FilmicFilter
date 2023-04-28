@@ -20,6 +20,8 @@ Spriteset_Map.prototype.createWeather = function() {
 const _Spriteset_Map_prototype_update = Spriteset_Map.prototype.update;
 Spriteset_Map.prototype.update = function() {
     _Spriteset_Map_prototype_update.call(this);
-    FilmicFilter.instance.enabled = $gameScreen._lnFilmicFilter.enabled;
+    if (FilmicFilter.instance) {
+        FilmicFilter.instance.enabled = $gameScreen._lnFilmicFilter.enabled;
+    }
 }
 

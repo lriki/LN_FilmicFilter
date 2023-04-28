@@ -29,7 +29,7 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
 
 export class FilmicFilter extends PIXI.Filter
 {
-    public static instance: FilmicFilter;
+    public static instance: FilmicFilter | undefined;
 
     public blurXFilter: PIXI.filters.BlurFilterPass;
     public blurYFilter: PIXI.filters.BlurFilterPass;
@@ -44,30 +44,38 @@ export class FilmicFilter extends PIXI.Filter
     private _seperableBlurPassVList: SeperableBlurPass[];
     //private _bloomCompositePass: BloomCompositePass;
 
-    constructor(strength?: number, quality?: number, resolution?: number, kernelSize?: number)
-    {
-    super();
+    constructor(strength?: number, quality?: number, resolution?: number, kernelSize?: number) {
+        super();
 
-    this.resolution = resolution || PIXI.settings.RESOLUTION;
-    this.blurXFilter = new PIXI.filters.BlurFilterPass(true, strength || 8, quality || 4, this.resolution, kernelSize);
-    this.blurYFilter = new PIXI.filters.BlurFilterPass(false, strength || 8, quality || 4, this.resolution, kernelSize);
+        this.resolution = resolution || PIXI.settings.RESOLUTION;
+        this.blurXFilter = new PIXI.filters.BlurFilterPass(true, strength || 8, quality || 4, this.resolution, kernelSize);
+        this.blurYFilter = new PIXI.filters.BlurFilterPass(false, strength || 8, quality || 4, this.resolution, kernelSize);
 
-    this._repeatEdgePixels = false;
-    this.updatePadding();
+        this._repeatEdgePixels = false;
+        this.updatePadding();
 
-    this.blendMode = this.blurYFilter.blendMode;
-    this._copyPass = new CopyFilterPass();
-    this._blendPass = new BlurBlendFilterPass();
+        this.blendMode = this.blurYFilter.blendMode;
+        this._copyPass = new CopyFilterPass();
+        this._blendPass = new BlurBlendFilterPass();
 
-    this._luminosityHighPassFilter = new LuminosityHighPassFilter();
+        this._luminosityHighPassFilter = new LuminosityHighPassFilter();
 
-    this._seperableBlurPassHList = [];
-    this._seperableBlurPassVList = [];
-    for (let i = 0; i < MIPS; i++) {
-        this._seperableBlurPassHList.push(new SeperableBlurPass(kernelSizeArray[i], kernelSizeArray[i], true));
-        this._seperableBlurPassVList.push(new SeperableBlurPass(kernelSizeArray[i], kernelSizeArray[i], false));
+        this._seperableBlurPassHList = [];
+        this._seperableBlurPassVList = [];
+        for (let i = 0; i < MIPS; i++) {
+            this._seperableBlurPassHList.push(new SeperableBlurPass(kernelSizeArray[i], kernelSizeArray[i], true));
+            this._seperableBlurPassVList.push(new SeperableBlurPass(kernelSizeArray[i], kernelSizeArray[i], false));
+        }
     }
-    }
+
+    // public destroy(): void {
+    //     for (const pass of this._seperableBlurPassHList) {
+    //         pass.destroy();
+    //     }
+    //     for (const pass of this._seperableBlurPassVList) {
+    //         pass.destroy();
+    //     }
+    // }
 
     apply(filterManager: PIXI.systems.FilterSystem, input: PIXI.RenderTexture, output: PIXI.RenderTexture, clear: boolean, currentState?: any): void
     {

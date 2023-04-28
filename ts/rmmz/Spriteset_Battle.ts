@@ -13,6 +13,7 @@ Spriteset_Battle.prototype.createLowerLayer = function() {
 const _Spriteset_Battle_prototype_update = Spriteset_Battle.prototype.update;
 Spriteset_Battle.prototype.update = function() {
     _Spriteset_Battle_prototype_update.call(this);
-    FilmicFilter.instance.enabled = $gameScreen._lnFilmicFilter.enabled;
+    if (FilmicFilter.instance) {
+        FilmicFilter.instance.enabled = $gameScreen._lnFilmicFilter.enabled;
+    }
 }
-
